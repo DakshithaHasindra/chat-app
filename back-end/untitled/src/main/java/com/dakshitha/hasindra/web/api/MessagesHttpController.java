@@ -1,22 +1,34 @@
 package com.dakshitha.hasindra.web.api;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.dakshitha.hasindra.web.to.MessageTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Vector;
 
 @RestController
 @RequestMapping("/api/v1/messages")
+@CrossOrigin
+@Validated
 public class MessagesHttpController {
+    List<MessageTO> messageList = new Vector<>();
 
-    @GetMapping
-    public void getAllMessages(){
-
+    public List<MessageTO> getMessageList(){
+        return messageList;
     }
 
+    @GetMapping
+    public List<MessageTO> getAllMessages(){
+    return messageList;
+    }
 
-    @PostMapping
-    public void saveMessage(){
-
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public MessageTO saveMessage(@RequestBody @Valid MessageTO message){
+        messageList.add(message);
+        return message;
     }
 }
